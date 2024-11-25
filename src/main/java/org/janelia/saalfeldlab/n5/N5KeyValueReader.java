@@ -126,11 +126,14 @@ public class N5KeyValueReader implements CachedGsonKeyValueN5Reader {
 		this.cacheMeta = cacheMeta;
 		this.cache = newCache();
 
+		Colored.cyan.println( "N5KeyValueReader.N5KeyValueReader" );
+		Colored.cyan.println( "  basePath = " + basePath );
 		try {
 			uri = keyValueAccess.uri(basePath);
 		} catch (final URISyntaxException e) {
 			throw new N5Exception(e);
 		}
+		Colored.cyan.println( "  uri = " + uri + "   // uri = keyValueAccess.uri(basePath)");
 
 		rootedKeyValueAccess = new DefaultRootedKeyValueAccess( keyValueAccess, uri );
 
