@@ -46,6 +46,7 @@ public class N5KeyValueReader implements CachedGsonKeyValueN5Reader {
 	public static final String ATTRIBUTES_JSON = "attributes.json";
 
 	protected final KeyValueAccess keyValueAccess;
+	private final RootedKeyValueAccess rootedKeyValueAccess;
 
 	protected final Gson gson;
 	protected final boolean cacheMeta;
@@ -131,6 +132,8 @@ public class N5KeyValueReader implements CachedGsonKeyValueN5Reader {
 			throw new N5Exception(e);
 		}
 
+		rootedKeyValueAccess = new DefaultRootedKeyValueAccess( keyValueAccess, uri );
+
 		if (checkVersion) {
 			/* Existence checks, if any, go in subclasses */
 			/* Check that version (if there is one) is compatible. */
@@ -154,6 +157,12 @@ public class N5KeyValueReader implements CachedGsonKeyValueN5Reader {
 	public KeyValueAccess getKeyValueAccess() {
 
 		return keyValueAccess;
+	}
+
+	@Override
+	public RootedKeyValueAccess getRootedKeyValueAccess() {
+
+		return rootedKeyValueAccess;
 	}
 
 	@Override

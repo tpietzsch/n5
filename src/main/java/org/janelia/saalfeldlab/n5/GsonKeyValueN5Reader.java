@@ -43,6 +43,8 @@ public interface GsonKeyValueN5Reader extends GsonN5Reader {
 
 	KeyValueAccess getKeyValueAccess();
 
+	RootedKeyValueAccess getRootedKeyValueAccess();
+
 	default boolean groupExists(final String normalPath) {
 
 		return getKeyValueAccess().isDirectory(absoluteGroupPath(normalPath));
