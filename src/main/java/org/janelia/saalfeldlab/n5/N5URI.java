@@ -516,7 +516,7 @@ public class N5URI {
 	}
 
 	/**
-	 * Encode the inpurt {@link String uri} so that illegal characters are
+	 * Encode the input {@link String uri} so that illegal characters are
 	 * properly escaped prior to generating the resulting {@link URI}.
 	 *
 	 * @param uri
