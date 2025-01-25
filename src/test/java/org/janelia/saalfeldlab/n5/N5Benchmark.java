@@ -81,10 +81,10 @@ public class N5Benchmark {
 
 	private static final Compression[] compressions = {
 			new RawCompression(),
-			new Bzip2Compression(),
+//			new Bzip2Compression(),
 			new GzipCompression(),
 			new Lz4Compression(),
-			new XzCompression()
+//			new XzCompression()
 	};
 
 
@@ -144,7 +144,7 @@ public class N5Benchmark {
 		}
 	}
 
-//	@Test
+	@Test
 	public void benchmarkWritingSpeed() {
 
 		final int nBlocks = 5;
@@ -221,7 +221,7 @@ public class N5Benchmark {
 		}
 	}
 
-	@Test
+//	@Test
 	public void benchmarkParallelWritingSpeed() {
 
 		final int nBlocks = 5;
