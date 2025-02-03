@@ -30,7 +30,7 @@ import java.io.InputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.janelia.saalfeldlab.n5.Compression.CompressionType;
-import org.janelia.saalfeldlab.n5.readdata.OutputStreamEncoder;
+import org.janelia.saalfeldlab.n5.readdata.OutputStreamEncoder.EncodedOutputStream;
 import org.janelia.saalfeldlab.n5.readdata.ReadData;
 
 @CompressionType("xz")
@@ -63,14 +63,14 @@ public class XzCompression implements Compression {
 	@Override
 	public ReadData decode(final ReadData readData, final int decodedLength) throws IOException {
 		final InputStream inflater = new XZCompressorInputStream(readData.inputStream());
-		return ReadData.from(inflater, decodedLength);
+		return ReadData.from(inflater, decodedLength).order(readData.order());
 	}
 
 	@Override
 	public ReadData encode(final ReadData readData) {
 		return readData.encode(out -> {
 			final XZCompressorOutputStream deflater = new XZCompressorOutputStream(out, preset);
-			return new OutputStreamEncoder.EncodedOutputStream(deflater, deflater::finish);
+			return new EncodedOutputStream(deflater, deflater::finish);
 		});
 	}
 }

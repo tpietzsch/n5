@@ -65,7 +65,7 @@ public class Lz4Compression implements Compression {
 	@Override
 	public ReadData decode(final ReadData readData, final int decodedLength) throws IOException {
 		final InputStream inflater = new LZ4BlockInputStream(readData.inputStream());
-		return ReadData.from(inflater, decodedLength);
+		return ReadData.from(inflater, decodedLength).order(readData.order());
 	}
 
 	@Override

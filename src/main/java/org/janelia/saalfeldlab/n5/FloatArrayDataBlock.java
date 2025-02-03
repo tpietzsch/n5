@@ -37,10 +37,8 @@ public class FloatArrayDataBlock extends AbstractDataBlock<float[]> {
 		super(size, gridPosition, data);
 	}
 
-	@Override
-	public void readData(final ByteOrder byteOrder, final ReadData readData) throws IOException {
-		final ByteBuffer serialized = ByteBuffer.wrap(readData.allBytes());
-		serialized.order(byteOrder).asFloatBuffer().get(data);
+	public void readData(final ReadData readData) throws IOException {
+		readData.toByteBuffer().asFloatBuffer().get(data);
 	}
 
 	@Override

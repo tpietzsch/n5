@@ -44,7 +44,7 @@ public class StringDataBlock extends AbstractDataBlock<String[]> {
 	}
 
 	@Override
-	public void readData(final ByteOrder byteOrder, final ReadData readData) throws IOException {
+	public void readData(final ReadData readData) throws IOException {
 		serializedData = readData.allBytes();
 		final String rawChars = new String(serializedData, ENCODING);
 		actualData = rawChars.split(NULLCHAR);
@@ -60,7 +60,7 @@ public class StringDataBlock extends AbstractDataBlock<String[]> {
 
 	@Override
 	public ReadData writeData(final ByteOrder byteOrder) {
-		return ReadData.from(serialize());
+		return ReadData.from(serialize()).order(byteOrder);
 	}
 
 	@Override

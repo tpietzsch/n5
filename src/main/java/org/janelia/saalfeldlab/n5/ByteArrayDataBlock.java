@@ -37,14 +37,13 @@ public class ByteArrayDataBlock extends AbstractDataBlock<byte[]> {
 		super(size, gridPosition, data);
 	}
 
-	@Override
-	public void readData(final ByteOrder byteOrder, final ReadData readData) throws IOException {
+	public void readData(final ReadData readData) throws IOException {
 		new DataInputStream(readData.inputStream()).readFully(data);
 	}
 
 	@Override
 	public ReadData writeData(final ByteOrder byteOrder) {
-		return ReadData.from(data);
+		return ReadData.from(data).order(byteOrder);
 	}
 
 	@Override

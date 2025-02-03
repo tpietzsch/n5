@@ -3,9 +3,10 @@ package org.janelia.saalfeldlab.n5.readdata;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 
-class ByteArraySplittableReadData implements SplittableReadData {
+class ByteArraySplittableReadData extends AbstractReadData implements SplittableReadData {
 
 	private final byte[] data;
 	private final int offset;
@@ -46,12 +47,18 @@ class ByteArraySplittableReadData implements SplittableReadData {
 	}
 
 	@Override
-	public SplittableReadData split(final long offset, final long length) throws IOException {
+	public SplittableReadData split(final long offset, final long length) {
 		if (offset < 0 || offset > this.length || length < 0) {
 			throw new IndexOutOfBoundsException();
 		}
 		final int o = this.offset + (int) offset;
 		final int l = Math.min((int) length, this.length - o);
-		return new ByteArraySplittableReadData(data, o, l);
+		return new ByteArraySplittableReadData(data, o, l).order(this.order());
+	}
+
+	@Override
+	public SplittableReadData order(final ByteOrder byteOrder) {
+		super.order(byteOrder);
+		return this;
 	}
 }

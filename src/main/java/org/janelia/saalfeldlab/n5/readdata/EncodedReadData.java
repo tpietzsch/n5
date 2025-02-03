@@ -5,25 +5,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-class EncodedReadData implements ReadData {
+class EncodedReadData extends AbstractReadData {
 
 	private final ReadData source;
 
 	private final OutputStreamEncoder encoder;
 
 	EncodedReadData(final ReadData data, final OutputStreamEncoder encoder) {
+		super(data.order());
 		this.source = data;
 		this.encoder = encoder;
 	}
 
-	private ByteArraySplittableReadData bytes;
+	private SplittableReadData bytes;
 
 	@Override
 	public SplittableReadData splittable() throws IOException {
 		if (bytes == null) {
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream(8192);
 			writeTo(baos);
-			bytes = new ByteArraySplittableReadData(baos.toByteArray());
+			bytes = new ByteArraySplittableReadData(baos.toByteArray()).order(this.order());
 		}
 		return bytes;
 	}

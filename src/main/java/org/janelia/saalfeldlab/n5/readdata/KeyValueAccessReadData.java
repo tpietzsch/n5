@@ -3,6 +3,7 @@ package org.janelia.saalfeldlab.n5.readdata;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteOrder;
 import org.janelia.saalfeldlab.n5.KeyValueAccess;
 import org.janelia.saalfeldlab.n5.LockedChannel;
 

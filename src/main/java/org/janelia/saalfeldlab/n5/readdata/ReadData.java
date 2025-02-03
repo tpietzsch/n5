@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import org.janelia.saalfeldlab.n5.BytesCodec;
 import org.janelia.saalfeldlab.n5.KeyValueAccess;
 
@@ -77,6 +78,28 @@ public interface ReadData {
 	byte[] allBytes() throws IOException, IllegalStateException;
 
 	/**
+	 * Return the contained data as a {@code ByteBuffer}.
+	 * <p>
+	 * This may use {@link #inputStream()} to read the data.
+	 * Because repeatedly calling {@link #inputStream()} may not work,
+	 * <ol>
+	 * <li>this method may fail with {@code IllegalStateException} if {@code inputStream()} was already called</li>
+	 * <li>subsequent {@code inputStream()} calls may fail with {@code IllegalStateException}</li>
+	 * </ol>
+	 * The returned ByteBuffer will have the same {@link ByteBuffer#order() byte order} as this {@code ReadData}.
+	 *
+	 * @return all contained data as a ByteBuffer
+	 *
+	 * @throws IOException
+	 * 		if any I/O error occurs
+	 * @throws IllegalStateException
+	 * 		if {@link #inputStream()} was already called once and cannot be called again.
+	 */
+	default ByteBuffer toByteBuffer() throws IOException, IllegalStateException {
+		return ByteBuffer.wrap(allBytes()).order(this.order());
+	}
+
+	/**
 	 * If this {@code ReadData} is a {@code SplittableReadData}, just returns {@code this}.
 	 * <p>
 	 * Otherwise, if the underlying data is an {@code InputStream}, all data is read and
@@ -109,12 +132,43 @@ public interface ReadData {
 		outputStream.write(allBytes());
 	}
 
+	/**
+	 * Get the byte order.
+	 * <p>
+	 * Note, that this is the "intended" ByteOrder, when interpreting multibyte
+	 * values. There is nothing in the {@code ReadData} API where the byte order
+	 * is actually used, except {@link #toByteBuffer()} which returns a {@code
+	 * ByteBuffer} with this byte order.
+	 * <p>
+	 * Newly created {@code ReadData} always have byte order {@code BIG_ENDIAN},
+	 * except when created using {@link #from(ByteBuffer)} where the order of
+	 * the ByteBuffer is copied.
+	 *
+	 * @return the byte order
+	 */
+	ByteOrder order();
+
+
+	/**
+	 * Modifies the byte order of this {@code ReadData}.
+	 * <p>
+	 * Note, that this is the "intended" ByteOrder, when interpreting multibyte
+	 * values. There is nothing in the {@code ReadData} API where the byte order
+	 * is actually used, except {@link #toByteBuffer()} which returns a {@code
+	 * ByteBuffer} with this byte order.
+	 *
+	 * @param  byteOrder
+	 *         the new byte order
+	 *
+	 * @return {@code this}
+	 */
+	ReadData order(ByteOrder byteOrder);
+
+
 	//
  	//
 	// ------------- Encoding / Decoding ----------------
 	//
-
-	// TODO: WIP, exploring API options...
 
 	/**
 	 * Returns a new ReadData that uses the given {@code Codec} to encode this
@@ -252,6 +306,8 @@ public interface ReadData {
 
 	/**
 	 * Create a new {@code ReadData} that wraps the given {@code ByteBuffer}.
+	 * The {@link #order()} of the returned {@code ReadData} is the same as the
+	 * {@link ByteBuffer#order() order} of the {@code ByteBuffer}.
 	 *
 	 * @param data
 	 * 		buffer containing the data
@@ -260,7 +316,7 @@ public interface ReadData {
 	 */
 	static SplittableReadData from(final ByteBuffer data) {
 		if (data.hasArray()) {
-			return from(data.array(), 0, data.limit());
+			return from(data.array(), 0, data.limit()).order(data.order());
 		} else {
 			throw new UnsupportedOperationException("TODO. Direct ByteBuffer not supported yet.");
 		}

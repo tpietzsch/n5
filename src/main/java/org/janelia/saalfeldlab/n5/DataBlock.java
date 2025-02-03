@@ -78,14 +78,10 @@ public interface DataBlock<T> {
 	 * modifying the data object of this data block after calling this method
 	 * may or may not change the content of the {@code ReadData}.
 	 *
-	 * @param byteOrder
-	 * 		ByteOrder to use for serialization
 	 * @param readData
 	 * 		data to deserialize
 	 */
-	// TODO: include ByteOrder in ReadData
-	// TODO: rename? "readFrom"? "deserializeFrom"?
-	void readData(ByteOrder byteOrder, ReadData readData) throws IOException;
+	void readData(ReadData readData) throws IOException;
 
 	/**
 	 * Creates a {@link ReadData} that contains the serialized data object of

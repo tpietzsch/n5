@@ -44,10 +44,8 @@ public class DoubleArrayDataBlock extends AbstractDataBlock<double[]> {
 		return ReadData.from(serialized);
 	}
 
-	@Override
-	public void readData(final ByteOrder byteOrder, final ReadData readData) throws IOException {
-		final ByteBuffer serialized = ByteBuffer.wrap(readData.allBytes());
-		serialized.order(byteOrder).asDoubleBuffer().get(data);
+	public void readData(final ReadData readData) throws IOException {
+		readData.toByteBuffer().asDoubleBuffer().get(data);
 	}
 
 	@Override

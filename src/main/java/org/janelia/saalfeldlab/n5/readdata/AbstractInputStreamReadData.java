@@ -5,9 +5,9 @@ import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 
 // not thread-safe
-abstract class AbstractInputStreamReadData implements ReadData {
+abstract class AbstractInputStreamReadData extends AbstractReadData {
 
-	private ByteArraySplittableReadData bytes;
+	private SplittableReadData bytes;
 
 	@Override
 	public SplittableReadData splittable() throws IOException {
@@ -20,7 +20,7 @@ abstract class AbstractInputStreamReadData implements ReadData {
 			} else {
 				data = IOUtils.toByteArray(inputStream());
 			}
-			bytes = new ByteArraySplittableReadData(data);
+			bytes = new ByteArraySplittableReadData(data).order(this.order());
 		}
 		return bytes;
 	}

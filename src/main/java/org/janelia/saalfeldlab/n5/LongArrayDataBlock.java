@@ -38,9 +38,8 @@ public class LongArrayDataBlock extends AbstractDataBlock<long[]> {
 	}
 
 	@Override
-	public void readData(final ByteOrder byteOrder, final ReadData readData) throws IOException {
-		final ByteBuffer serialized = ByteBuffer.wrap(readData.allBytes());
-		serialized.order(byteOrder).asLongBuffer().get(data);
+	public void readData(final ReadData readData) throws IOException {
+		readData.toByteBuffer().asLongBuffer().get(data);
 	}
 
 	@Override
