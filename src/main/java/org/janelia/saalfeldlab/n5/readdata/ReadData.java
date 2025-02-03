@@ -194,9 +194,6 @@ public interface ReadData {
 	 * 		OutputStreamEncoder to use for encoding
 	 *
 	 * @return encoded ReadData
-	 *
-	 * @throws IOException
-	 * 		if any I/O error occurs
 	 */
 	default ReadData encode(OutputStreamEncoder encoder) {
 		return new EncodedReadData(this, encoder);
