@@ -48,7 +48,7 @@ class ByteArraySplittableReadData extends AbstractReadData implements Splittable
 
 	@Override
 	public SplittableReadData split(final long offset, final long length) {
-		if (offset < 0 || offset > this.length || length < 0) {
+		if (offset < 0 || offset >= this.length || length < 0) {
 			throw new IndexOutOfBoundsException();
 		}
 		final int o = this.offset + (int) offset;
